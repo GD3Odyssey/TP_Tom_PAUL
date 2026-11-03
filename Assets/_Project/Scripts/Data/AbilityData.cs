@@ -4,13 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewAbility", menuName = "Abilities/Ability Data")]
 public class AbilityData : ScriptableObject
 {
-    [Header("Informations")]
+    [Header("Infos")]
     public string abilityName;
     [TextArea(2, 4)]
     public string description;
     public Sprite icon;
 
-    [Header("Combat")]
+    [Header("Stats")]
     public float damage;
     public float cooldown;
 
@@ -19,9 +19,7 @@ public class AbilityData : ScriptableObject
     public Color effectColor = Color.white;
     public GameObject projectilePrefab;
 
-    [Header("Impact")]
+    [Header("VFX")]
     public GameObject impactPrefab;
-
-    [Header("Animation")]
     public string animationTrigger;
 }

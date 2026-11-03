@@ -20,5 +20,5 @@ MonoBehaviour:
   projectileSpeed: 8
   effectColor: {r: 0, g: 0.34434605, b: 1, a: 1}
   projectilePrefab: {fileID: 0}
-  impactPrefab: {fileID: 0}
+  impactPrefab: {fileID: 7275548786892498063, guid: 5bc9a0bf98f67d240a936bf476ba2082, type: 3}
   animationTrigger: Attack2H

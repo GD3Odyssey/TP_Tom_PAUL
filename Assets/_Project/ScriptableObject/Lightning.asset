@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfcc4d14713359e4a9421392ad7de9c0, type: 3}
-  m_Name: Meteor
+  m_Name: Lightning
   m_EditorClassIdentifier: Assembly-CSharp::AbilityData
-  abilityName: "M\xE9t\xE9ore"
-  description: "Envoi un m\xE9t\xE9ore"
+  abilityName: Eclair
+  description: "Envoi un \xE9clair sur la cible"
   icon: {fileID: 0}
   damage: 80
   cooldown: 8
   projectileSpeed: 15
-  effectColor: {r: 0.51103926, g: 0, b: 1, a: 1}
+  effectColor: {r: 1, g: 0.9947701, b: 0.3830188, a: 1}
   projectilePrefab: {fileID: 0}
-  impactPrefab: {fileID: 0}
+  impactPrefab: {fileID: 8762405910555896786, guid: fcb74f28d107e284e80af037bfec14ca, type: 3}
   animationTrigger: Attack1H

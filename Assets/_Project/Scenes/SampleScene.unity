@@ -136,6 +136,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbb716f217ff4784b9736edda0ef7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!95 &41003333 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
+  m_PrefabInstance: {fileID: 785440399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &41003334 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
+  m_PrefabInstance: {fileID: 785440399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &41003335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41003329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db2fc7095f75904bb98832fb2efde99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityManager
+  abilities:
+  - {fileID: 11400000, guid: 020e064238725ac4b8c3319075911fff, type: 2}
+  - {fileID: 11400000, guid: 37b221ffba719cb46b9e697aaeda5125, type: 2}
+  - {fileID: 11400000, guid: e8198ac94f819044296d48a42fda8f5d, type: 2}
+  animator: {fileID: 41003333}
+  target: {fileID: 1393612306}
+  projectileSpawnPoint: {fileID: 1018576069}
 --- !u!1 &79342490
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +331,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 1.7, y: 1, z: -17.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -759,7 +788,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c0b305e8d70ca420fa17a04f11bb18e6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 4.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c0b305e8d70ca420fa17a04f11bb18e6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -871,11 +900,17 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 3379d4c5cc19e44f29288694a4cea188, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1018576069}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 41003332}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 41003335}
   m_SourcePrefab: {fileID: 100100000, guid: 14e602daf385043818bc3f58cfed0af6, type: 3}
 --- !u!1 &805831955
 GameObject:
@@ -1162,6 +1197,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005938103}
   m_CullTransparentMesh: 1
+--- !u!1 &1018576068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1018576069}
+  m_Layer: 0
+  m_Name: ProjectileSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1018576069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018576068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.448, z: 0.638}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 41003334}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1334453505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,6 +1324,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbb716f217ff4784b9736edda0ef7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestAnimator
+--- !u!4 &1393612306 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c0b305e8d70ca420fa17a04f11bb18e6, type: 3}
+  m_PrefabInstance: {fileID: 683699572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1598171546
 GameObject:
   m_ObjectHideFlags: 0
