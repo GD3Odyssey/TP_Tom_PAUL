@@ -30,4 +30,15 @@ public class TestAnimator : MonoBehaviour
     {
         _animator.SetTrigger("Attack2H");
     }
+
+    // les 2 méthodes ci dessous sont temporaires pour montrer la méthode
+    public class GameCompetence : ScriptableObject
+    {
+        // exemple scriptable objects
+    }
+
+    public void LoadCompencesDef()
+    {
+        GameCompetence[] competencesDef = Resources.LoadAll<GameCompetence>("Chemin du dossier / dans Resources");
+    }
 }
