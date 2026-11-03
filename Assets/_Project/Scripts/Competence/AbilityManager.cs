@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AbilityManager : MonoBehaviour
 {
-    [Header("Liste des competences")]
+    [Header("Liste des capacites")]
     [SerializeField] private List<AbilityData> abilities = new List<AbilityData>();
 
     [Header("References")]
@@ -16,7 +16,6 @@ public class AbilityManager : MonoBehaviour
     [SerializeField] private Transform projectileSpawnPoint;
 
     private readonly HashSet<AbilityData> coolingDown = new HashSet<AbilityData>();
-    private readonly Dictionary<AbilityData, Coroutine> cooldownCoroutines = new Dictionary<AbilityData, Coroutine>();
 
     public IReadOnlyList<AbilityData> Abilities => abilities;
 
@@ -34,106 +33,128 @@ public class AbilityManager : MonoBehaviour
     public void InitializeAbilities()
     {
         StopAllCoroutines();
-
         coolingDown.Clear();
-        cooldownCoroutines.Clear();
 
         for (int i = 0; i < abilities.Count; i++)
         {
             if (abilities[i] == null)
-                Debug.LogWarning($"AbilityManager : capacité non renseignée {i}", this);
+                Debug.LogWarning($"AbilityManager : ERREUR capacite absente {i}", this);
         }
 
-        Debug.Log($"AbilityManager : {abilities.Count} compétences configurées", this);
+        Debug.Log($"AbilityManager : {abilities.Count} capacites initialisees", this);
     }
 
-    // Utilisation via index dans la liste
+    // Utilisation via identifiant
     public bool TryUseAbility(int abilityIndex)
     {
         if (abilityIndex < 0 || abilityIndex >= abilities.Count)
         {
-            Debug.LogWarning("AbilityManager : identifiant de compétence invalide", this);
+            Debug.LogWarning("AbilityManager : ERREUR identifiant invalide", this);
             return false;
         }
 
         return TryUseAbility(abilities[abilityIndex]);
     }
 
-    // Utilisation via ScriptableObject => AbilityData
+    // Utilisation via ressource AbilityData
     public bool TryUseAbility(AbilityData ability)
     {
-        if (ability == null)
-        {
-            Debug.LogWarning("AbilityManager : erreur compétence nulle", this);
+        if (ability == null || !abilities.Contains(ability))
             return false;
-        }
-
-        if (!abilities.Contains(ability))
-        {
-            Debug.LogWarning("AbilityManager : erreur compétence absente de la liste", this);
-            return false;
-        }
 
         if (coolingDown.Contains(ability))
             return false;
 
         if (animator == null || target == null || projectileSpawnPoint == null)
         {
-            Debug.LogError("AbilityManager : erreur il manque une ref", this);
+            Debug.LogError("AbilityManager : ERREUR reference manquante", this);
             return false;
         }
 
         if (ability.projectilePrefab == null)
         {
-            Debug.LogWarning($"AbilityManager : aucun projectile assigné {ability.abilityName}.", this);
+            Debug.LogWarning($"Aucun projectile assigne a {ability.abilityName}", this);
+            return false;
+        }
+
+        if (ability.projectileSpeed <= 0f)
+        {
+            Debug.LogWarning($"Vitesse invalide pour {ability.abilityName}", this);
             return false;
         }
 
         LaunchAbility(ability);
-
         return true;
     }
 
     private void LaunchAbility(AbilityData ability)
     {
-        // animation d'attaque du personnage
-        animator.ResetTrigger(ability.animationTrigger);
-        animator.SetTrigger(ability.animationTrigger);
+        // Animation du joueur
+        if (!string.IsNullOrEmpty(ability.animationTrigger))
+        {
+            animator.ResetTrigger(ability.animationTrigger);
+            animator.SetTrigger(ability.animationTrigger);
+        }
 
-        // projectile instantié
-        GameObject projectile = Instantiate(ability.projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        // Trajectoire du projectile
+        Vector3 startPosition = projectileSpawnPoint.position;
+        Vector3 targetPosition = target.position;
 
-        // cooldown
+        // Projectile instantié
+        GameObject projectile = Instantiate(ability.projectilePrefab, startPosition, projectileSpawnPoint.rotation);
+
+        // Couleur du projectile en fonction de sa nature
+        ApplyProjectileColor(projectile, ability.effectColor);
+
+        float distance = Vector3.Distance(startPosition, targetPosition);
+        float duration = distance / ability.projectileSpeed;
+
         StartCooldown(ability);
 
-        float distance = Vector3.Distance(projectile.transform.position, target.position);
-
-        float duration = distance / Mathf.Max(ability.projectileSpeed, 0.01f);
-
-        // Trajectoire gérée via DOTween
-        projectile.transform.DOMove(target.position, duration)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => OnProjectileImpact(projectile, ability));
+        // Trajectoire via DOTween
+        projectile.transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).SetLink(projectile, LinkBehaviour.KillOnDestroy).OnComplete(() =>
+        {
+            OnProjectileImpact(projectile, ability, targetPosition);
+        });
     }
 
-    private void OnProjectileImpact(GameObject projectile, AbilityData ability)
+    private void ApplyProjectileColor(GameObject projectile, Color color)
     {
-        // Gestion des dégâts et VFX d'impact
+        Renderer[] renderers = projectile.GetComponentsInChildren<Renderer>();
+
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.GetPropertyBlock(propertyBlock);
+
+            propertyBlock.SetColor("_BaseColor", color);
+            propertyBlock.SetColor("_Color", color);
+
+            renderer.SetPropertyBlock(propertyBlock);
+        }
+    }
+
+    private void OnProjectileImpact(GameObject projectile, AbilityData ability, Vector3 impactPosition)
+    {
+        // Application des degats
+
         if (target != null)
         {
             target.SendMessage("TakeDamage", ability.damage, SendMessageOptions.DontRequireReceiver);
+        }
 
-            if (ability.impactPrefab != null)
-            {
-                Instantiate(ability.impactPrefab, target.position, Quaternion.identity);
-            }
+        // VFX
+        if (ability.impactPrefab != null)
+        {
+            Instantiate(ability.impactPrefab, impactPosition, Quaternion.identity);
         }
 
         if (projectile != null)
             Destroy(projectile);
     }
 
-    // cooldown
+    // Cooldown
     private void StartCooldown(AbilityData ability)
     {
         if (ability.cooldown <= 0f)
@@ -146,8 +167,7 @@ public class AbilityManager : MonoBehaviour
 
         OnCooldownStarted?.Invoke(ability, ability.cooldown);
 
-        Coroutine routine = StartCoroutine(CooldownRoutine(ability));
-        cooldownCoroutines[ability] = routine;
+        StartCoroutine(CooldownRoutine(ability));
     }
 
     private IEnumerator CooldownRoutine(AbilityData ability)
@@ -155,12 +175,10 @@ public class AbilityManager : MonoBehaviour
         yield return new WaitForSeconds(ability.cooldown);
 
         coolingDown.Remove(ability);
-        cooldownCoroutines.Remove(ability);
 
         OnCooldownFinished?.Invoke(ability);
     }
 
- 
     public bool IsAbilityAvailable(AbilityData ability)
     {
         return ability != null && abilities.Contains(ability) && !coolingDown.Contains(ability);

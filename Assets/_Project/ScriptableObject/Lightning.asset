@@ -19,6 +19,6 @@ MonoBehaviour:
   cooldown: 8
   projectileSpeed: 15
   effectColor: {r: 1, g: 0.9947701, b: 0.3830188, a: 1}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 4780664828754160133, guid: b133e8e8389287645bdb75db502bcdc1, type: 3}
   impactPrefab: {fileID: 8762405910555896786, guid: fcb74f28d107e284e80af037bfec14ca, type: 3}
   animationTrigger: Attack1H

@@ -19,6 +19,21 @@ public class TestAnimator : MonoBehaviour
         {
             TriggerAttack2H();
         }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            GetComponent<AbilityManager>().TryUseAbility(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            GetComponent<AbilityManager>().TryUseAbility(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GetComponent<AbilityManager>().TryUseAbility(2);
+        }
     }
 
     public void TriggerAttack1H()
