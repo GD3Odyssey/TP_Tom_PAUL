@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfcc4d14713359e4a9421392ad7de9c0, type: 3}
   m_Name: FireBall
   m_EditorClassIdentifier: Assembly-CSharp::AbilityData
-  abilityName: Boule de feu
+  abilityName: Feu
   description: Envoi une boule de feu
   icon: {fileID: 0}
   damage: 30
